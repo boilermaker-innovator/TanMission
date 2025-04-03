@@ -1,0 +1,724 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tiamoyo Project News</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            color: #0077b6;
+            margin-bottom: 15px;
+        }
+        
+        h2 {
+            color: #0077b6;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        
+        .article-container {
+            margin-bottom: 60px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 30px;
+        }
+        
+        .article-header {
+            margin-bottom: 30px;
+        }
+        
+        .date {
+            color: #666;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        
+        .featured-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .highlight-box {
+            background-color: #f0f7ff;
+            border-left: 4px solid #0077b6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #0077b6;
+        }
+        
+        ul {
+            padding-left: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .needs-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+        
+        .needs-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .image-caption {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+        
+        .signature {
+            margin-top: 40px;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+        
+        /* 👍i Widget - Inline Version */
+        .thumbs-i-container {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px dashed #ccc;
+        }
+        
+        .support-prompt {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 15px;
+        }
+        
+        .thumbs-i-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            background: #0077b6;
+            border-radius: 50%;
+            font-size: 32px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease;
+            color: white;
+            border: none;
+        }
+        
+        .thumbs-i-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .i-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            color: #0077b6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-style: italic;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        /* Popup Overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+            display: none;
+        }
+        
+        /* Popup Container */
+        .tiamoyo-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            width: 320px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: none;
+            animation: popup-fade-in 0.3s ease;
+            z-index: 9999;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes popup-fade-in {
+            from { opacity: 0; transform: translate(-50%, -45%); }
+            to { opacity: 1; transform: translate(-50%, -50%); }
+        }
+        
+        /* Popup Header */
+        .popup-header {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0077b6;
+            margin-bottom: 5px;
+        }
+        
+        .popup-subtitle {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        /* Project Options */
+        .project-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .project-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .project-option:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .option-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .option-details {
+            flex-grow: 1;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            font-size: 15px;
+            color: #333;
+        }
+        
+        .option-desc {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+        
+        /* Project Details */
+        .project-icon-large {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .project-description {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .donate-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: background-color 0.2s;
+            margin-bottom: 15px;
+        }
+        
+        .donate-button:hover {
+            background-color: #43a047;
+        }
+        
+        .visual-element {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Well visualization */
+        .well-progress {
+            height: 150px;
+            width: 60px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .well-water {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 35%;
+            background-color: #48cae4;
+        }
+        
+        /* Navigation Buttons */
+        .popup-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-button, .close-button {
+            color: #0077b6;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .back-button:hover, .close-button:hover {
+            text-decoration: underline;
+        }
+        
+        /* Thank You Popup */
+        .thank-you-message {
+            text-align: center;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+        
+        .thank-you-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <!-- Article 1: The Tractors Have Arrived -->
+    <div class="article-container">
+        <article>
+            <div class="article-header">
+                <h1>The Tractors Have Arrived: Transforming Agriculture in Tanzania</h1>
+                <div class="date">March 10, 2025</div>
+            </div>
+            
+            <img src="https://images.unsplash.com/photo-1589923188900-85dae523342b?q=80&w=1000" alt="Tractor in a field" class="featured-image">
+            <p class="image-caption">The Leyland tractor after being pressure cleaned by Michael Hack</p>
+            
+            <p>Great news from Tanzania! Both tractors that were carefully loaded into the container have successfully arrived in Tanzania on Christmas Day. This marks a significant milestone for our agricultural development efforts in the region and will dramatically improve our ability to support local farmers.</p>
+            
+            <p>The container, which departed on December 2nd, included:</p>
+            <ul>
+                <li>A refurbished Leyland tractor, thoroughly pressure-cleaned by Michael Hack</li>
+                <li>A small Ford tractor to support farming operations</li>
+                <li>Essential agricultural equipment for local farmers</li>
+                <li>Spare parts and maintenance tools</li>
+            </ul>
+            
+            <p>Thanks to the dedicated efforts of Michael Hack, Gray Blattmann, and Tim Wright who worked tirelessly to prepare and load the container, these valuable resources are now available to support our agricultural initiatives.</p>
+            
+            <div class="highlight-box">
+                <div class="highlight-title">February 2025 Goals</div>
+                <p>In February 2025, we anticipate achieving the following milestones:</p>
+                <ul>
+                    <li>Training local farmers at the college</li>
+                    <li>Finalizing the curriculum for farmer education</li>
+                    <li>Training James and John in using our large planter</li>
+                    <li>Developing the best strategy for farmer training and outreach</li>
+                    <li>Assembling the tractors for immediate use</li>
+                    <li>Building a 3-row planter and tractor trailer</li>
+                    <li>Digging a well on the Agape farm</li>
+                    <li>Setting up sprayers and calibrating equipment for planting</li>
+                </ul>
+            </div>
+            
+            <h2>Current Challenges</h2>
+            
+            <p>While this is exciting progress, we still face some challenges. The Fordson tractor we purchased needs an injector pump replacement, which will take time. This meant we had to purchase another tractor, depleting our budget funds more than expected. Additionally, the fees to retrieve the container from the Tanzanian wharf were higher than anticipated.</p>
+            
+            <div class="needs-section">
+                <div class="needs-title">THE NEEDS</div>
+                <p>One of our most pressing goals is to dig a well on the Agape land and install a submersible pump. This critical infrastructure would:</p>
+                <ul>
+                    <li>Help mitigate against drought conditions</li>
+                    <li>Enable vegetable growing during the dry season</li>
+                    <li>Support year-round agricultural training</li>
+                    <li>Provide sustainable water access for the community</li>
+                </ul>
+                
+                <p>The estimated cost for the well and pump is $5,000, with good water available about 60 feet down.</p>
+                
+                <p>Additionally, we need funds for accommodation and meals during our six-week stay, plus funds for immediate in-the-moment purchase of parts and other supplies to complete this next leg of the project.</p>
+            </div>
+            
+            <h2>The Budget and Our Vision</h2>
+            
+            <p>Thank you to the many who faithfully give what they can to the project. Budgeting for spending is always a challenge, and the best help is having regular monthly donors. No matter how insignificant the amounts look, they all add up over the year and give us a base from which to project our annual budget.</p>
+            
+            <p>We are now ready to take on new villages and engage our team in farmer training. As part of their training at Agape College, pastors/leaders/students who wish to will receive training in Conservation Agriculture. The course we use is called Foundations for Farming.</p>
+            
+            <p>In the last newsletter (October 2024), we mentioned that we need to arrange a budget for the college course and acquire a decent printer for the college to provide our documents to the students. It often requires feeding them meals and providing accommodation out in the villages.</p>
+            
+            <div class="signature">
+                <p>Thank you for your continued support of the Tiamoyo Project.</p>
+                <p>- The Tiamoyo Team</p>
+            </div>
+            
+            <!-- Inline 👍i Widget for this article -->
+            <div class="thumbs-i-container">
+                <p class="support-prompt">Support this project with a small donation:</p>
+                <button class="thumbs-i-button" onclick="showProjectsPopup('article1')">
+                    👍
+                    <div class="i-badge">i</div>
+                </button>
+            </div>
+        </article>
+    </div>
+    <!-- Article 2: Different Story -->
+    <div class="article-container">
+        <article>
+            <div class="article-header">
+                <h1>Training the Next Generation of Farmers in Tanzania</h1>
+                <div class="date">March 5, 2025</div>
+            </div>
+            
+            <img src="https://images.unsplash.com/photo-1594498653385-d5172c532c00?q=80&w=1000" alt="Farming training session" class="featured-image">
+            <p class="image-caption">Local farmers learning conservation agriculture techniques</p>
+            
+            <p>The Tiamoyo Project continues to make strides in agricultural education and training throughout Tanzania. Last month, we conducted four intensive training sessions with 68 local farmers, focusing on sustainable farming practices that preserve soil health while increasing crop yields.</p>
+            
+            <p>"The knowledge we're gaining is transformative," says Joseph Mbembe, a farmer from a village near Arusha. "With these techniques, I can grow more food on the same land while protecting it for future generations."</p>
+            
+            <p>Our training programs cover several key areas:</p>
+            <ul>
+                <li>Conservation agriculture principles</li>
+                <li>Efficient water usage techniques</li>
+                <li>Sustainable pest management</li>
+                <li>Crop rotation and diversification</li>
+                <li>Post-harvest handling and storage</li>
+            </ul>
+            
+            <p>These educational initiatives are crucial for addressing food security challenges in the region, especially as climate change brings increasingly unpredictable weather patterns.</p>
+            
+            <div class="highlight-box">
+                <div class="highlight-title">Training Impact</div>
+                <p>Farmers who have completed our training program have reported:</p>
+                <ul>
+                    <li>30% increase in crop yields</li>
+                    <li>40% reduction in water usage</li>
+                    <li>Greater resilience during drought periods</li>
+                    <li>Improved soil health and reduced erosion</li>
+                    <li>Higher income from surplus crops</li>
+                </ul>
+            </div>
+            
+            <h2>Expanding Our Reach</h2>
+            
+            <p>With your continued support, we aim to expand our training program to reach five additional villages in the coming months. This expansion will require additional educational materials, demonstration equipment, and transportation resources.</p>
+            
+            <p>The Agape College continues to be our central hub for training, but we recognize the importance of bringing education directly to the villages where many farmers cannot afford to travel long distances.</p>
+            
+            <div class="signature">
+                <p>Together, we're cultivating a sustainable future for Tanzania.</p>
+                <p>- The Tiamoyo Education Team</p>
+            </div>
+            
+            <!-- Inline 👍i Widget for this article -->
+            <div class="thumbs-i-container">
+                <p class="support-prompt">Support this project with a small donation:</p>
+                <button class="thumbs-i-button" onclick="showProjectsPopup('article2')">
+                    👍
+                    <div class="i-badge">i</div>
+                </button>
+            </div>
+        </article>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popup-overlay"></div>
+    
+    <!-- Project Selection Popup -->
+    <div id="projects-popup" class="tiamoyo-popup">
+        <div class="popup-header">
+            <div class="popup-title">Tiamoyo Project</div>
+            <div class="popup-subtitle">Your $5 makes a difference!</div>
+        </div>
+        
+        <div class="project-options">
+            <div class="project-option" onclick="showProjectDetails('well')">
+                <span class="option-icon">💧</span>
+                <div class="option-details">
+                    <div class="option-title">Dig the Well</div>
+                    <div class="option-desc">$5 funds 1 inch of well drilling</div>
+                </div>
+            </div>
+            
+            <div class="project-option" onclick="showProjectDetails('tractor')">
+                <span class="option-icon">🚜</span>
+                <div class="option-details">
+                    <div class="option-title">Fuel the Tractors</div>
+                    <div class="option-desc">$5 powers 1 hour of tractor operation</div>
+                </div>
+            </div>
+            
+            <div class="project-option" onclick="showProjectDetails('training')">
+                <span class="option-icon">👨‍🌾</span>
+                <div class="option-details">
+                    <div class="option-title">Train Farmers</div>
+                    <div class="option-desc">$5 contributes to training sessions</div>
+                </div>
+            </div>
+            
+            <div class="project-option" onclick="showProjectDetails('support')">
+                <span class="option-icon">🙏</span>
+                <div class="option-details">
+                    <div class="option-title">General Support</div>
+                    <div class="option-desc">$5 helps our mission in Tanzania</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="popup-footer">
+            <div></div>
+            <span class="close-button" onclick="closePopups()">Close</span>
+        </div>
+    </div>
+    
+    <!-- Project Details Popups -->
+    <div id="well-details" class="tiamoyo-popup">
+        <div class="popup-header">
+            <div class="project-icon-large">💧</div>
+            <div class="popup-title">Dig the Well</div>
+            <div class="popup-subtitle">Help us reach water 60 feet below</div>
+        </div>
+        
+        <div class="project-description">
+            We need to dig a well on the Agape farm to provide sustainable water access for irrigation and community use. Water is available 60 feet (720 inches) below ground.
+        </div>
+        
+        <div class="visual-element">
+            <div class="well-progress">
+                <div class="well-water"></div>
+            </div>
+            <div style="font-size: 12px; margin-top: 10px; color: #666;">Currently at 35% of our $5,000 goal</div>
+        </div>
+        
+        <button class="donate-button" onclick="showThankYou('well')">Donate $5 to Dig 1 Inch</button>
+        
+        <div class="popup-footer">
+            <span class="back-button" onclick="backToProjects()">← Back</span>
+            <span class="close-button" onclick="closePopups()">Close</span>
+        </div>
+    </div>
+    
+    <div id="tractor-details" class="tiamoyo-popup">
+        <div class="popup-header">
+            <div class="project-icon-large">🚜</div>
+            <div class="popup-title">Fuel the Tractors</div>
+            <div class="popup-subtitle">Keep our equipment running</div>
+        </div>
+        
+        <div class="project-description">
+            Our tractors are crucial for preparing farmland for local families. We recently shipped two tractors to Tanzania that need fuel and maintenance to operate effectively for the community.
+        </div>
+        
+        <div class="visual-element">
+            <div class="tractor-icon">🚜</div>
+            <div style="font-size: 12px; color: #666; margin-top: 10px;">40% of monthly fuel needs funded</div>
+        </div>
+        
+        <button class="donate-button" onclick="showThankYou('tractor')">Donate $5 for 1 Hour of Operation</button>
+        
+        <div class="popup-footer">
+            <span class="back-button" onclick="backToProjects()">← Back</span>
+            <span class="close-button" onclick="closePopups()">Close</span>
+        </div>
+    </div>
+    
+    <div id="training-details" class="tiamoyo-popup">
+        <div class="popup-header">
+            <div class="project-icon-large">👨‍🌾</div>
+            <div class="popup-title">Train Farmers</div>
+            <div class="popup-subtitle">Teaching sustainable agriculture</div>
+        </div>
+        
+        <div class="project-description">
+            We provide training in conservation agriculture techniques to local farmers, helping them increase crop yields while preserving natural resources for future generations.
+        </div>
+        
+        <div class="visual-element">
+            <div style="font-size: 24px;">👨‍🌾 👩‍🌾 👨‍🌾</div>
+            <div style="font-size: 12px; color: #666; margin-top: 10px;">68 farmers trained so far</div>
+        </div>
+        
+        <button class="donate-button" onclick="showThankYou('training')">Donate $5 to Support Training</button>
+        
+        <div class="popup-footer">
+            <span class="back-button" onclick="backToProjects()">← Back</span>
+            <span class="close-button" onclick="closePopups()">Close</span>
+        </div>
+    </div>
+    
+    <div id="support-details" class="tiamoyo-popup">
+        <div class="popup-header">
+            <div class="project-icon-large">🙏</div>
+            <div class="popup-title">General Support</div>
+            <div class="popup-subtitle">Help where needed most</div>
+        </div>
+        
+        <div class="project-description">
+            Your general support allows us to direct funds to the most urgent needs across all our projects in Tanzania, ensuring we can respond quickly to changing priorities.
+        </div>
+        
+        <div class="visual-element">
+            <div style="font-size: 40px; color: #e74c3c;">❤️</div>
+            <div style="font-size: 12px; color: #666; margin-top: 10px;">Supporting communities since 2019</div>
+        </div>
+        
+        <button class="donate-button" onclick="showThankYou('support')">Donate $5 for General Support</button>
+        
+        <div class="popup-footer">
+            <span class="back-button" onclick="backToProjects()">← Back</span>
+            <span class="close-button" onclick="closePopups()">Close</span>
+        </div>
+    </div>
+    
+    <!-- Thank You Popup -->
+    <div id="thank-you-popup" class="tiamoyo-popup">
+        <div class="thank-you-message">
+            <div class="success-icon">✓</div>
+            <div class="thank-you-title">Thank You!</div>
+            <p id="thank-you-message">Your donation will help support our work in Tanzania.</p>
+            <p>We'll send you updates on our progress!</p>
+        </div>
+        
+        <button class="donate-button" onclick="closePopups()">Back to Article</button>
+    </div>
+
+    <script>
+        // Track which article triggered the popup
+        let currentArticle = '';
+        let currentProject = '';
+        
+        // Show projects popup from a specific article
+        function showProjectsPopup(articleId) {
+            closePopups(); // Close any open popups first
+            currentArticle = articleId;
+            document.getElementById('projects-popup').style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+        
+        // Show project details popup
+        function showProjectDetails(projectType) {
+            closePopups(); // Close all popups first
+            currentProject = projectType;
+            document.getElementById(`${projectType}-details`).style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+        
+        // Go back to projects selection
+        function backToProjects() {
+            closePopups(); // Close all popups first
+            document.getElementById('projects-popup').style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+        
+        // Show thank you message
+        function showThankYou(projectType) {
+            closePopups(); // Close all popups first
+            
+            // Set custom thank you message based on project type
+            let message = '';
+            switch(projectType) {
+                case 'well':
+                    message = 'Your donation of $5 will help dig 1 inch of our well at the Agape farm.';
+                    break;
+                case 'tractor':
+                    message = 'Your donation of $5 will fuel our tractors for 1 hour of operation.';
+                    break;
+                case 'training':
+                    message = 'Your donation of $5 will support training sessions for local farmers.';
+                    break;
+                case 'support':
+                    message = 'Your donation of $5 will support our overall mission in Tanzania.';
+                    break;
+                default:
+                    message = 'Your donation will help support our work in Tanzania.';
+            }
+            
+            document.getElementById('thank-you-message').textContent = message;
+            document.getElementById('thank-you-popup').style.display = 'block';
+            document.getElementById('popup-overlay').style.display = 'block';
+        }
+        
+        // Close all popups
+        function closePopups() {
+            const popups = document.querySelectorAll('.tiamoyo-popup');
+            popups.forEach(popup => {
+                popup.style.display = 'none';
+            });
+            document.getElementById('popup-overlay').style.display = 'none';
+        }
+        
+        // Close popup when clicking overlay
+        document.getElementById('popup-overlay').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopups();
+            }
+        });
+    </script>
+</body>
+</html>
