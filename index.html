@@ -766,7 +766,7 @@
     </div>
 </body>
 </html>
-<!-- Tiamoyo 👍i Widget - Embed this code on your page -->
+<!-- Tiamoyo 👍i Widget with Payment Form - Embed this code on your page -->
 <style>
     /* Widget Container */
     .tiamoyo-widget {
@@ -838,7 +838,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         background: white;
-        width: 300px;
+        width: 320px;
         padding: 20px;
         border-radius: 12px;
         box-shadow: 0 5px 20px rgba(0,0,0,0.2);
@@ -1062,6 +1062,119 @@
         color: #333;
     }
 
+    /* Payment Form Styling */
+    .payment-form {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .form-header {
+        background-color: #00a37f;
+        color: white;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .form-header h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .form-content {
+        padding: 15px;
+    }
+
+    .donation-amounts {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .amount-option {
+        flex: 1;
+        background: #f5f5f5;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px 4px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 14px;
+    }
+
+    .amount-option.selected {
+        background: #00a37f;
+        color: white;
+        border-color: #00a37f;
+    }
+
+    .donation-description {
+        background: #f9f9f9;
+        padding: 10px;
+        border-radius: 4px;
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+
+    .donation-impact {
+        font-weight: bold;
+        color: #00a37f;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    .form-label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 5px;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    .card-details {
+        display: flex;
+        gap: 10px;
+    }
+
+    .card-details .form-group {
+        flex: 1;
+    }
+
+    .submit-button {
+        background-color: #00a37f;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.2s;
+    }
+
+    .submit-button:hover {
+        background-color: #008c6c;
+    }
+
+    .form-footer {
+        margin-top: 10px;
+        text-align: center;
+        font-size: 12px;
+        color: #777;
+    }
+
     /* Mobile Responsiveness */
     @media (max-width: 480px) {
         .tiamoyo-popup {
@@ -1148,7 +1261,7 @@
         <div style="font-size: 12px; margin-top: 10px; color: #666;">Currently at 35% of our $5,000 goal</div>
     </div>
     
-    <button class="donate-button" onclick="showThankYou('well')">Donate $5 to Dig 1 Inch</button>
+    <button class="donate-button" onclick="showPaymentForm('well')">Donate $5 to Dig 1 Inch</button>
     
     <div class="popup-footer">
         <span class="back-button" onclick="backToProjects()">← Back</span>
@@ -1178,7 +1291,7 @@
         </div>
     </div>
     
-    <button class="donate-button" onclick="showThankYou('tractor')">Donate $5 for 1 Hour of Operation</button>
+    <button class="donate-button" onclick="showPaymentForm('tractor')">Donate $5 for 1 Hour of Operation</button>
     
     <div class="popup-footer">
         <span class="back-button" onclick="backToProjects()">← Back</span>
@@ -1212,7 +1325,7 @@
         <div style="font-size: 12px; color: #666;">68 farmers trained so far</div>
     </div>
     
-    <button class="donate-button" onclick="showThankYou('training')">Donate $5 to Support Training</button>
+    <button class="donate-button" onclick="showPaymentForm('training')">Donate $5 to Support Training</button>
     
     <div class="popup-footer">
         <span class="back-button" onclick="backToProjects()">← Back</span>
@@ -1237,10 +1350,69 @@
         <div style="font-size: 12px; color: #666;">Supporting communities since 2019</div>
     </div>
     
-    <button class="donate-button" onclick="showThankYou('support')">Donate $5 for General Support</button>
+    <button class="donate-button" onclick="showPaymentForm('support')">Donate $5 for General Support</button>
     
     <div class="popup-footer">
         <span class="back-button" onclick="backToProjects()">← Back</span>
+        <span class="close-button" onclick="closePopups()">Close</span>
+    </div>
+</div>
+
+<!-- Payment Form Popup -->
+<div id="payment-form-popup" class="tiamoyo-popup">
+    <div class="payment-form">
+        <div class="form-header">
+            <h3 id="payment-form-title">Your donation helps Tiamoyo</h3>
+        </div>
+        
+        <div class="form-content">
+            <div class="donation-amounts">
+                <div class="amount-option" onclick="selectAmount(5)">$5</div>
+                <div class="amount-option selected" onclick="selectAmount(15)">$15</div>
+                <div class="amount-option" onclick="selectAmount(25)">$25</div>
+                <div class="amount-option" onclick="selectAmount(50)">$50</div>
+            </div>
+            
+            <div class="donation-description">
+                Your donation of <span class="donation-impact" id="donation-impact">$15 will dig 3 inches</span> of our well on the Agape farm.
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" placeholder="Your name">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" placeholder="Your email address">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Card Number</label>
+                <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+            </div>
+            
+            <div class="card-details">
+                <div class="form-group">
+                    <label class="form-label">Expiry</label>
+                    <input type="text" class="form-control" placeholder="MM/YY">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">CVC</label>
+                    <input type="text" class="form-control" placeholder="123">
+                </div>
+            </div>
+            
+            <button class="submit-button" id="submit-payment-button" onclick="showThankYou()">Donate $15</button>
+            
+            <div class="form-footer">
+                Secure payment via Raisly
+            </div>
+        </div>
+    </div>
+    
+    <div class="popup-footer">
+        <span class="back-button" id="payment-back-button">← Back</span>
         <span class="close-button" onclick="closePopups()">Close</span>
     </div>
 </div>
@@ -1258,6 +1430,10 @@
 </div>
 
 <script>
+    // Current project and amount state
+    let currentProject = '';
+    let currentAmount = 15;
+    
     // Initialize event listener when document is ready
     document.addEventListener('DOMContentLoaded', function() {
         // Add click event to the thumbs-i button
@@ -1268,6 +1444,12 @@
         // Add click event to the overlay for closing popups
         document.getElementById('popup-overlay').addEventListener('click', function() {
             closePopups();
+        });
+        
+        // Set up back button for payment form
+        document.getElementById('payment-back-button').addEventListener('click', function() {
+            closePopups();
+            showProjectDetails(currentProject);
         });
     });
     
@@ -1281,6 +1463,7 @@
     // Show project details popup
     function showProjectDetails(projectType) {
         closePopups(); // Close all popups first
+        currentProject = projectType;
         document.getElementById(`${projectType}-details`).style.display = 'block';
         document.getElementById('popup-overlay').style.display = 'block';
     }
@@ -1292,27 +1475,102 @@
         document.getElementById('popup-overlay').style.display = 'block';
     }
     
-    // Show thank you message
-    function showThankYou(projectType) {
+    // Show payment form
+    function showPaymentForm(projectType) {
         closePopups(); // Close all popups first
+        currentProject = projectType;
         
-        // Set custom thank you message based on project type
-        let message = '';
+        // Set form title and impact text based on project type
+        const formTitle = document.getElementById('payment-form-title');
+        const impactText = document.getElementById('donation-impact');
+        
         switch(projectType) {
             case 'well':
-                message = 'Your donation of $5 will help dig 1 inch of our well at the Agape farm.';
+                formTitle.textContent = 'Your donation helps dig the well';
+                updateImpactText(currentAmount, 'well');
                 break;
             case 'tractor':
-                message = 'Your donation of $5 will fuel our tractors for 1 hour of operation.';
+                formTitle.textContent = 'Your donation helps fuel the tractors';
+                updateImpactText(currentAmount, 'tractor');
                 break;
             case 'training':
-                message = 'Your donation of $5 will support training sessions for local farmers.';
+                formTitle.textContent = 'Your donation helps train farmers';
+                updateImpactText(currentAmount, 'training');
                 break;
             case 'support':
-                message = 'Your donation of $5 will support our overall mission in Tanzania.';
+                formTitle.textContent = 'Your donation supports our mission';
+                updateImpactText(currentAmount, 'support');
+                break;
+        }
+        
+        document.getElementById('payment-form-popup').style.display = 'block';
+        document.getElementById('popup-overlay').style.display = 'block';
+    }
+    
+    // Select donation amount
+    function selectAmount(amount) {
+        currentAmount = amount;
+        
+        // Update visual selection
+        const options = document.querySelectorAll('.amount-option');
+        options.forEach(option => {
+            option.classList.remove('selected');
+            if (option.textContent === `$${amount}`) {
+                option.classList.add('selected');
+            }
+        });
+        
+        // Update impact text
+        updateImpactText(amount, currentProject);
+        
+        // Update button text
+        document.getElementById('submit-payment-button').textContent = `Donate $${amount}`;
+    }
+    
+    // Update impact text based on amount and project
+    function updateImpactText(amount, projectType) {
+        const impactText = document.getElementById('donation-impact');
+        const units = Math.floor(amount / 5);
+        
+        switch(projectType) {
+            case 'well':
+                impactText.textContent = `$${amount} will dig ${units} inch${units !== 1 ? 'es' : ''}`;
+                break;
+            case 'tractor':
+                impactText.textContent = `$${amount} will fuel ${units} hour${units !== 1 ? 's' : ''} of operation`;
+                break;
+            case 'training':
+                impactText.textContent = `$${amount} will support ${units} training session${units !== 1 ? 's' : ''}`;
+                break;
+            case 'support':
+                impactText.textContent = `$${amount} will support our mission in Tanzania`;
+                break;
+        }
+    }
+    
+    // Show thank you message
+    function showThankYou() {
+        closePopups(); // Close all popups first
+        
+        // Set custom thank you message based on project type and amount
+        let message = '';
+        const units = Math.floor(currentAmount / 5);
+        
+        switch(currentProject) {
+            case 'well':
+                message = `Your donation of $${currentAmount} will help dig ${units} inch${units !== 1 ? 'es' : ''} of our well at the Agape farm.`;
+                break;
+            case 'tractor':
+                message = `Your donation of $${currentAmount} will fuel our tractors for ${units} hour${units !== 1 ? 's' : ''} of operation.`;
+                break;
+            case 'training':
+                message = `Your donation of $${currentAmount} will support ${units} training session${units !== 1 ? 's' : ''} for local farmers.`;
+                break;
+            case 'support':
+                message = `Your donation of $${currentAmount} will support our overall mission in Tanzania.`;
                 break;
             default:
-                message = 'Your donation will help support our work in Tanzania.';
+                message = `Your donation of $${currentAmount} will help support our work in Tanzania.`;
         }
         
         document.getElementById('thank-you-message').textContent = message;
@@ -1329,4 +1587,3 @@
         document.getElementById('popup-overlay').style.display = 'none';
     }
 </script>
-
